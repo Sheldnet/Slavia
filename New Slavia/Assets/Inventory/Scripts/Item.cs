@@ -14,6 +14,10 @@ public class Item
         SnakeSkin,
         PigeonFeather,
         Magnet,
+        FireOpal,
+        SandClock,
+        MagicBook,
+        LuckyCoin,
     }
 
     public ItemType itemType;
@@ -29,6 +33,10 @@ public class Item
             case ItemType.SnakeSkin: return ItemAssets.Instance.SnakeSkinSprite;
             case ItemType.PigeonFeather: return ItemAssets.Instance.PigeonFeatherSprite;
             case ItemType.Magnet: return ItemAssets.Instance.MagnetSprite;
+            case ItemType.FireOpal: return ItemAssets.Instance.FireOpal;
+            case ItemType.SandClock: return ItemAssets.Instance.SandClock;
+            case ItemType.MagicBook: return ItemAssets.Instance.MagicBook;
+            case ItemType.LuckyCoin: return ItemAssets.Instance.LuckyCoin;
         }
     }
 
@@ -42,6 +50,10 @@ public class Item
             case ItemType.SnakeSkin:
             case ItemType.PigeonFeather:
             case ItemType.Magnet:
+            case ItemType.FireOpal:
+            case ItemType.SandClock:
+            case ItemType.MagicBook:
+            case ItemType.LuckyCoin:
                 return true;
         }
     }

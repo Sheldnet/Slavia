@@ -8,6 +8,8 @@ public class basicEnemy : MonoBehaviour
     private bool hasReal;
     public float speed = 2;
     public bool loop =false;
+    public float dmg;
+    public float exp;
 
     public Vector2 direction = new Vector2(1, 0);
     public Vector2 velocity;
@@ -46,6 +48,7 @@ public class basicEnemy : MonoBehaviour
         heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().FinalDamage;
         if (heal <= 0)
         {
+            GameObject.Find("Player").GetComponent<Player>().experience += exp;
             Destroy(this.gameObject);
         }
     }
@@ -62,7 +65,7 @@ public class basicEnemy : MonoBehaviour
             case "Enemy":
                 break;
             case "Player":
-                GameObject.Find("Player").GetComponent<Player>().health--;
+                GameObject.Find("Player").GetComponent<Player>().health -= dmg;                
                 Destroy(this.gameObject);
                 break;
         }

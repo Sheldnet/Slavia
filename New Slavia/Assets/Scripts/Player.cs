@@ -13,10 +13,18 @@ public class Player : MonoBehaviour
     public float tempACD, AttackCD, FinalDamage, FinalShootSpeed, FinalRange, FinalItemPickupRange, FinalMoveSpeed;
     private float MoveSpeed, Damage, FloatDamage, AttackSpeed, FloatAttackSpeed, ShootSpeed, Range, DamageReduction, ItemPickupRangeRadius;
     private float MoveSpeedMul, DamageMul, AttackSpeedMul, ShootSpeedMul, RangeMul, ItemPickupRangeMul;
+
+    public int level;
     public float health;
-    public float maxHealth = 6;
+    public float maxHealth = 25;
+    public float experience;
+    public float expFactor = 0;
+    public float maxExp = 100;
+    public int goldScore;
+
     public enum ControlType { PC, Android }
     public ControlType controlType;
+
     //public Joystick joystick;
     public float speed;
     public GameObject Bullet, Bullet1, Bullet2, Bullet3;
@@ -123,7 +131,7 @@ public class Player : MonoBehaviour
         }
 
         Bullet.transform.localScale = new Vector2(6 + BonusAttackSize, 6 + BonusAttackSize);
-        maxHealth = 6 + BonusMaxHealth;
+        maxHealth += BonusMaxHealth;
 
         if (controlType == ControlType.PC) MoveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")); //Передвижение ПК
         //else if (controlType == ControlType.Android) MoveInput = new Vector2(joystick.Horizontal, joystick.Vertical); //Передвижение Андроид
@@ -147,6 +155,24 @@ public class Player : MonoBehaviour
         }
         else tempACD -= Time.deltaTime;
 
+
+
+        playerStats();
+    }
+
+
+    public void playerStats ()
+    { 
+        if(experience > maxExp)
+        {
+            experience -= maxExp; 
+            level++;
+            maxExp *= level;
+            //maxHealth*=level;
+        }
+
+
+    
     }
 
     //private void Move()

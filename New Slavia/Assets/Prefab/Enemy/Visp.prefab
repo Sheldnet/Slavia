@@ -122,17 +122,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 8389116922970670357}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9255ac18e1d691f4db8c8bd3c43ef85a, type: 3}
+  m_Script: {fileID: 11500000, guid: c9901234137b0a4498c9d98204a3bb7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   heal: 1
   speed: 2
   loop: 1
+  dmg: 5
+  exp: 25
   direction: {x: 1, y: 0}
   velocity: {x: 0, y: 0}
 --- !u!95 &482607845202163877
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -149,4 +151,5 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -19,4 +19,9 @@ public class ItemAssets : MonoBehaviour
     public Sprite SnakeSkinSprite;
     public Sprite PigeonFeatherSprite;
     public Sprite MagnetSprite;
+    public Sprite FireOpal;
+    public Sprite SandClock;
+    public Sprite MagicBook;
+    public Sprite LuckyCoin;
+
 }
