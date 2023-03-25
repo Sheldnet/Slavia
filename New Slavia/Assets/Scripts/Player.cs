@@ -14,12 +14,13 @@ public class Player : MonoBehaviour
     private float MoveSpeed, Damage, FloatDamage, AttackSpeed, FloatAttackSpeed, ShootSpeed, Range, DamageReduction, ItemPickupRangeRadius;
     private float MoveSpeedMul, DamageMul, AttackSpeedMul, ShootSpeedMul, RangeMul, ItemPickupRangeMul;
 
-    public int level;
+    public int level = 1;
     public float health;
     public float maxHealth = 25;
     public float experience;
     public float expFactor = 0;
     public float maxExp = 100;
+    public int expFromOrb;
     public int goldScore;
 
     public enum ControlType { PC, Android }
@@ -208,11 +209,20 @@ public class Player : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
-        ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
-        if (itemWorld != null) {
-            inventory.AddItem(itemWorld.GetItem());
-            itemWorld.DestroySelf();
+        if (collider.CompareTag("PassiveItem")) {
+            ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+            if (itemWorld != null) {
+                inventory.AddItem(itemWorld.GetItem());
+                itemWorld.DestroySelf();
+            }
         }
+        else if (collider.CompareTag("ExpOrb")) {
+            if (collider != null) {
+                experience += expFromOrb;
+                Destroy(collider.gameObject);
+            }
+        }
+        
     }
 
 

@@ -132,6 +132,7 @@ MonoBehaviour:
   exp: 25
   direction: {x: 1, y: 0}
   velocity: {x: 0, y: 0}
+  expOrbPrefab: {fileID: 1434024916476280555, guid: 2c45095064a3cad719c461db5e7e249e, type: 3}
 --- !u!95 &482607845202163877
 Animator:
   serializedVersion: 5

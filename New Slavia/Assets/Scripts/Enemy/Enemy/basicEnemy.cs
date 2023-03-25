@@ -14,6 +14,8 @@ public class basicEnemy : MonoBehaviour
     public Vector2 direction = new Vector2(1, 0);
     public Vector2 velocity;
 
+    [SerializeField] GameObject expOrbPrefab;
+
 
     void Start()
     {
@@ -48,7 +50,10 @@ public class basicEnemy : MonoBehaviour
         heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().FinalDamage;
         if (heal <= 0)
         {
-            GameObject.Find("Player").GetComponent<Player>().experience += exp;
+            //GameObject.Find("Player").GetComponent<Player>().experience += exp;
+            for (int i = 0; i < exp; i += 5) {
+                Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
+            }
             Destroy(this.gameObject);
         }
     }

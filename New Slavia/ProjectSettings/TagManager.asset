@@ -9,6 +9,8 @@ TagManager:
   - BulletEnemy
   - PassiveItem
   - Item
+  - PouchButton
+  - ExpOrb
   layers:
   - Default
   - TransparentFX

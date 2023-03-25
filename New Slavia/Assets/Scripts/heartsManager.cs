@@ -13,7 +13,7 @@ public class heartsManager : MonoBehaviour
     public float velocityHeal;
 
     public Image expBar;
-    public Text levelText;
+    public TMP_Text levelText;
     public float fillExp;
     public float velocityExp;
 

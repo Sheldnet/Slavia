@@ -19,7 +19,7 @@ public class ItemPickup : MonoBehaviour
     }
 
     private void OnTriggerStay2D(Collider2D collider) {
-        if (collider.CompareTag("PassiveItem")) {
+        if (collider.CompareTag("PassiveItem") || collider.CompareTag("ExpOrb")) {
             if (collider != null) {
                 //Rigidbody2D rb = collider.GetComponent<Rigidbody2D>();
                 //Vector2 direction = collider.transform.position - transform.position;
