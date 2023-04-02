@@ -13,16 +13,22 @@ public class Player : MonoBehaviour
     public float tempACD, AttackCD, FinalDamage, FinalShootSpeed, FinalRange, FinalItemPickupRange, FinalMoveSpeed;
     private float MoveSpeed, Damage, FloatDamage, AttackSpeed, FloatAttackSpeed, ShootSpeed, Range, DamageReduction, ItemPickupRangeRadius;
     private float MoveSpeedMul, DamageMul, AttackSpeedMul, ShootSpeedMul, RangeMul, ItemPickupRangeMul;
-
+    [Header("Experience")]
     public int level = 1;
-    public float health;
-    public float maxHealth = 25;
     public float experience;
-    public float expFactor = 0;
-    public float maxExp = 100;
-    public int expFromOrb;
-    public int goldScore;
-
+    public float expFactor;
+    public float maxExp;
+    public float expFromOrb;
+    [Header("HP")]
+    public float health;
+    public float healthFactor;
+    public float maxHealth;
+    [Header("Gold")]
+    public float goldFactor;
+    public float goldScore;
+    public float goldFromOrb;
+    public float FinalGold;
+    public float FinalExp;
     public enum ControlType { PC, Android }
     public ControlType controlType;
 
@@ -47,6 +53,9 @@ public class Player : MonoBehaviour
 
     void Start() //Исходные статы
     {
+
+        FinalExp = expFromOrb;
+        FinalGold = goldFromOrb;
         health = maxHealth;
 
         tempACD = 0;
@@ -114,8 +123,15 @@ public class Player : MonoBehaviour
         float BonusRange = 0;
         float BonusMaxHealth = 0;
         float BonusAttackSize = 0;
-
         float BonusItemPickupRange = 0;
+
+
+        //Fire opal, sand clock, magic book, lucky coin
+        float BonusGold = 0;
+        float BonusExp = 0;
+        float BonusHealth = 0;
+
+
 
         foreach (Item item in inventory.GetItemList()) {
             switch (item.itemType)
@@ -128,9 +144,27 @@ public class Player : MonoBehaviour
                 case Item.ItemType.SnakeSkin: DamageReduction = 2 * item.amount; break;
                 case Item.ItemType.PigeonFeather: BonusMoveSpeed = MoveSpeed * MoveSpeedMul / 10f * item.amount; break;
                 case Item.ItemType.Magnet: BonusItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul / 10f * item.amount; break;
+                case Item.ItemType.LuckyCoin:
+                    if (goldFromOrb * (goldFactor * item.amount + 1) > BonusGold)
+                        BonusGold = goldFromOrb * ( goldFactor * item.amount + 1);
+                    FinalGold = BonusGold;
+                    break;
+                case Item.ItemType.MagicBook: 
+                    if(expFromOrb * (expFactor * item.amount + 1) != BonusExp)
+                        BonusExp = expFromOrb * (expFactor * item.amount + 1);
+                    FinalExp = BonusExp;
+                    break;
+                case Item.ItemType.FireOpal: BonusHealth = healthFactor * item.amount; break;
+                //case Item.ItemType.Magnet: BonusItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul / 10f * item.amount; break;
+
             }
         }
-
+        ///
+       
+        Debug.Log(BonusGold);
+        
+        health += BonusHealth;
+        ////
         Bullet.transform.localScale = new Vector2(6 + BonusAttackSize, 6 + BonusAttackSize);
         maxHealth += BonusMaxHealth;
 
@@ -157,24 +191,16 @@ public class Player : MonoBehaviour
         else tempACD -= Time.deltaTime;
 
 
-
-        playerStats();
-    }
-
-
-    public void playerStats ()
-    { 
-        if(experience > maxExp)
+        if (experience > maxExp)
         {
-            experience -= maxExp; 
+            experience -= maxExp;
             level++;
             maxExp *= level;
             //maxHealth*=level;
         }
 
-
-    
     }
+
 
     //private void Move()
 
@@ -208,20 +234,48 @@ public class Player : MonoBehaviour
         yMaxborder = gameCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y - padding;
     }
 
-    private void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.CompareTag("PassiveItem")) {
-            ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
-            if (itemWorld != null) {
-                inventory.AddItem(itemWorld.GetItem());
-                itemWorld.DestroySelf();
-            }
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        switch (collider.tag)
+        {
+            case "PassiveItem":
+                ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+                if (itemWorld != null)
+                {
+                    inventory.AddItem(itemWorld.GetItem());
+                    itemWorld.DestroySelf();
+                }
+                break;
+            case "ExpOrb":
+                if (collider != null)
+                {
+                    experience += FinalExp;
+                    Destroy(collider.gameObject);
+                }
+                break;
+            case "GoldOrb":
+                if (collider != null)
+                {
+                    goldScore += FinalExp;
+                    Destroy(collider.gameObject);
+                }
+                break;
+
         }
-        else if (collider.CompareTag("ExpOrb")) {
-            if (collider != null) {
-                experience += expFromOrb;
-                Destroy(collider.gameObject);
-            }
-        }
+
+        //if (collider.CompareTag("PassiveItem")) {
+        //    ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+        //    if (itemWorld != null) {
+        //        inventory.AddItem(itemWorld.GetItem());
+        //        itemWorld.DestroySelf();
+        //    }
+        //}
+        //else if (collider.CompareTag("ExpOrb")) {
+        //    if (collider != null) {
+        //        experience += expFromOrb;
+        //        Destroy(collider.gameObject);
+        //    }
+        //}
         
     }
 

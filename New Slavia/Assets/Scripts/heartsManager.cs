@@ -17,6 +17,9 @@ public class heartsManager : MonoBehaviour
     public float fillExp;
     public float velocityExp;
 
+    public TMP_Text goldText;
+    public float velocityGold;
+
     void Start()
     {        
         fillHeal = 1f;
@@ -39,7 +42,7 @@ public class heartsManager : MonoBehaviour
     public void healMan()
     {
         fillHeal = pl.health / pl.maxHealth;
-        if (healtBar.fillAmount >= fillHeal)
+        if (healtBar.fillAmount > fillHeal)
             healtBar.fillAmount -= velocityDmg * Time.deltaTime;
         else if (healtBar.fillAmount <= fillHeal)
             healtBar.fillAmount += velocityDmg * Time.deltaTime;
@@ -55,7 +58,7 @@ public class heartsManager : MonoBehaviour
     }
     public void goldMan()
     {
-
+        goldText.text = pl.goldScore.ToString();
     }
 
 }

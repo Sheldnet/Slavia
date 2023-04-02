@@ -10,11 +10,13 @@ public class basicEnemy : MonoBehaviour
     public bool loop =false;
     public float dmg;
     public float exp;
+    public float gold;
 
     public Vector2 direction = new Vector2(1, 0);
     public Vector2 velocity;
 
     [SerializeField] GameObject expOrbPrefab;
+    [SerializeField] GameObject goldOrbPrefab;
 
 
     void Start()
@@ -53,6 +55,7 @@ public class basicEnemy : MonoBehaviour
             //GameObject.Find("Player").GetComponent<Player>().experience += exp;
             for (int i = 0; i < exp; i += 5) {
                 Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
+                Instantiate(goldOrbPrefab, transform.position, Quaternion.identity);
             }
             Destroy(this.gameObject);
         }

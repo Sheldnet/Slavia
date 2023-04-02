@@ -11,6 +11,7 @@ TagManager:
   - Item
   - PouchButton
   - ExpOrb
+  - GoldOrb
   layers:
   - Default
   - TransparentFX
