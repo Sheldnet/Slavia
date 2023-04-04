@@ -47,10 +47,10 @@ public class EnemyMovement : MonoBehaviour
         //_enemyRb.velocity = Vector3.ClampMagnitude(_movingDirection.normalized * speed, 10);
 
         _enemyRb.velocity = _movingDirection.normalized * speed;
-        Debug.Log(_movingDirection);
-        Debug.Log(_movingDirection.normalized);
-        Debug.Log(_enemyRb.velocity);
-        Debug.Log(_enemyRb.velocity.normalized);
+        //Debug.Log(_movingDirection);
+        //Debug.Log(_movingDirection.normalized);
+        //Debug.Log(_enemyRb.velocity);
+        //Debug.Log(_enemyRb.velocity.normalized);
         // Debug.Log(_enemyRb.velocity.magnitude);
     }
 
