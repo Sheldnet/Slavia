@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Передвижение")]
-    [SerializeField] public float MoveSpeed;
+    [SerializeField] public Stat MoveSpeed;
 
     private Rigidbody2D _playerRb;
 
@@ -20,6 +20,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _playerRb.velocity = _playerInput.MoveDirection.normalized * MoveSpeed;
+        _playerRb.velocity = _playerInput.MoveDirection.normalized * MoveSpeed.GetValue();
     }
 }

@@ -13,7 +13,13 @@ public class PlayerStatsController : MonoBehaviour
     public float FinalDamage;
     public float FinalBulletSpeed;
     public float FinalRange;
+    public float FinalItemPickupRange;
+    [SerializeField] private float ItemPickupRangeRadius;
+    [SerializeField] private float ItemPickupRangeMul;
 
+    [SerializeField] private float DamageReduction;
+
+    public GameObject ItemPickupRange;
     //public float xMaxborder;
     //public float xMinborder;
     //public float yMaxborder;
@@ -51,6 +57,24 @@ public class PlayerStatsController : MonoBehaviour
         {
             inventory.AddItem(itemWorld.GetItem());
             itemWorld.DestroySelf();
+        }
+        switch (collider.tag)
+        {
+            case "ExpOrb":
+                if (collider != null)
+                {
+                    _playerStats.TakeExperience(_playerStats.FinalExp);
+                    Destroy(collider.gameObject);
+                }
+                break;
+
+            case "GoldOrb":
+                if (collider != null)
+                {
+                    _playerStats.TakeGold(_playerStats.FinalGold);
+                    Destroy(collider.gameObject);
+                }
+                break;
         }
     }
 
@@ -105,7 +129,12 @@ public class PlayerStatsController : MonoBehaviour
         float BonusRange = 0;
         float BonusMaxHealth = 0;
         float BonusAttackSize = 0;
+        float BonusItemPickupRange = 0;
 
+        //Fire opal, sand clock, magic book, lucky coin
+        float BonusGold = 0;
+        float BonusExp = 0;
+        float BonusHealth = 0;
         foreach (Item item in inventory.GetItemList())
         {
             switch (item.itemType)
@@ -131,28 +160,87 @@ public class PlayerStatsController : MonoBehaviour
 
                 case Item.ItemType.BirchLeaves:
                     {
-                        BonusBulletSpeed = _playerStats.BulletSpeed.GetValue() / 2f * item.amount;
+                        BonusBulletSpeed = _playerStats.BulletSpeed.GetValue() / 10f * item.amount;
                     }
                     break; //10
+                case Item.ItemType.SnakeSkin:
+                    {
+                        DamageReduction = 2 * item.amount;
+                    }
+                    break;
+
+                case Item.ItemType.PigeonFeather:
+                    {
+                        BonusMoveSpeed = _playerMovement.MoveSpeed.GetValue() / 10f * item.amount;
+                    }
+                    break;
+
+                case Item.ItemType.Magnet:
+                    {
+                        BonusItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul / 10f * item.amount;
+                    }
+                    break;
+
+                case Item.ItemType.LuckyCoin:
+                    {
+                        if (_playerStats.GoldFromOrb * (_playerStats.GoldFactor * item.amount + 1) > BonusGold)
+                            BonusGold = _playerStats.GoldFromOrb * (_playerStats.GoldFactor * item.amount + 1);
+                        _playerStats.FinalGold = BonusGold;
+                    }
+                    break;
+
+                case Item.ItemType.MagicBook:
+                    {
+                        if (_playerStats.ExperienceFromOrb * (_playerStats.ExperienceFactor * item.amount + 1) != BonusExp)
+                            BonusExp = _playerStats.ExperienceFromOrb * (_playerStats.ExperienceFactor * item.amount + 1);
+                        _playerStats.FinalExp = BonusExp;
+                    }
+                    break;
+
+                case Item.ItemType.FireOpal:
+                    {
+                        BonusHealth = _playerStats.healthFactor * item.amount;
+                    }
+                    break;
             }
         }
 
         //Bullet.gameObject.transform.localScale = new Vector2(6 + BonusAttackSize, 6 + BonusAttackSize);
+        _playerStats.TakeDamage(-BonusHealth);
         _playerStats.MaxHealth = 6 + BonusMaxHealth;
 
         _playerStats.Damage.SetBonus(BonusDamage);
         _playerStats.Damage.SetBonus(BonusBulletSpeed);
+        _playerMovement.MoveSpeed.SetBonus(BonusMoveSpeed);
 
         //Конечная скорость атаки
+
         FinalDamage = _playerStats.Damage.GetValue(); //Конечный урон
         FinalBulletSpeed = _playerStats.BulletSpeed.GetValue(); //Конечная скорость полета пули
         FinalRange = _playerStats.Range.GetValue(); //Конечная дальность атаки
-        //Эти значения не передаются в пули СЕЙЧАС
+                                                    //Эти значения не передаются в пули СЕЙЧАС
+        FinalItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul + BonusItemPickupRange;
 
-        uiStats.SetStats(_playerMovement.MoveSpeed, FinalDamage, _shooting.AttackCD, FinalBulletSpeed, FinalRange, _shooting.CurrentBullet.transform.localScale.x, _playerStats.MaxHealth);
+        ItemPickupRange.GetComponent<CircleCollider2D>().radius = FinalItemPickupRange;
+
+        uiStats.SetStats(_playerMovement.MoveSpeed.GetValue(), FinalDamage, _shooting.AttackCD, FinalBulletSpeed, FinalRange, _shooting.CurrentBullet.transform.localScale.x, _playerStats.MaxHealth, DamageReduction, FinalItemPickupRange);
 
         //Ввод пользователя для управления и стрельбы
 
         //Стрельба
     }
+
+    //if (collider.CompareTag("PassiveItem")) {
+    //    ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+    //    if (itemWorld != null) {
+    //        inventory.AddItem(itemWorld.GetItem());
+    //        itemWorld.DestroySelf();
+    //    }
+    //}
+    //else if (collider.CompareTag("ExpOrb")) {
+    //    if (collider != null) {
+    //        experience += expFromOrb;
+    //        Destroy(collider.gameObject);
+    //    }
+    //}
 }

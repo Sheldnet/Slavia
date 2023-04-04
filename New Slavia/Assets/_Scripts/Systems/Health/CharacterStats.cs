@@ -6,11 +6,12 @@ public class CharacterStats : MonoBehaviour
 {
     [SerializeField] private float maxHealth;
     private float _currentHealth;
+    public float healthFactor;
     public Stat Damage;
     public Stat AttackSpeed;
     public Stat Range;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _currentHealth = maxHealth;
     }

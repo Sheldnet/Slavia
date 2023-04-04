@@ -83,7 +83,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.34375, y: 0.9375}
+  m_Size: {x: 1.7916666, y: 1.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -122,21 +122,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c347f227f95ea41a9c4f3704b3dcb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tempACD: 0
-  AttackCD: 0
-  FinalDamage: 0
-  FinalShootSpeed: 0
-  FinalRange: 0
-  health: 6
-  maxHealth: 0
   controlType: 0
-  speed: 0
-  Bullet: {fileID: 5361276976934835236, guid: b1a36244c33291a4e868c6d6acaacf3b, type: 3}
-  Bullet1: {fileID: 5620525262089965059, guid: 8865510644537f24b8c1f510d5b8e3c1, type: 3}
-  Bullet2: {fileID: 5435174726718465647, guid: febd6f08d1426c74cb2bbb3b7316d36c, type: 3}
-  Bullet3: {fileID: 0}
-  shotPoint: {fileID: 1897393386496048069}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
+  isDead: 0
+  FinalDamage: 0
+  FinalBulletSpeed: 0
+  FinalRange: 0
+  padding: 0.5
+  uiInventory: {fileID: 0}
+  uiStats: {fileID: 0}
 --- !u!95 &1224404008789252996
 Animator:
   serializedVersion: 4

@@ -6,7 +6,8 @@ public class ItemAssets : MonoBehaviour
 {
     public static ItemAssets Instance { get; private set; }
 
-    private void Awake() {
+    private void Awake()
+    {
         Instance = this;
     }
 
@@ -16,4 +17,11 @@ public class ItemAssets : MonoBehaviour
     public Sprite BullHeartSprite;
     public Sprite ShadowInABottleSprite;
     public Sprite BirchLeavesSprite;
+    public Sprite SnakeSkinSprite;
+    public Sprite PigeonFeatherSprite;
+    public Sprite MagnetSprite;
+    public Sprite FireOpal;
+    public Sprite SandClock;
+    public Sprite MagicBook;
+    public Sprite LuckyCoin;
 }
