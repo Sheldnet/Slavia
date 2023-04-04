@@ -7,14 +7,14 @@ public class bullet : MonoBehaviour
     public Vector2 direction = new Vector2(1, 0);
     public float speed = 2;
     public Vector2 velocity;
-    bool hasReal;
+    private bool hasReal;
 
-    void Start()
+    private void Start()
     {
         hasReal = true;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         velocity = direction * speed;
         Vector2 pos = transform.position;
@@ -27,16 +27,18 @@ public class bullet : MonoBehaviour
         hasReal = false;
         Destroy(this.gameObject);
     }
+
     private void OnBecameVisible()
     {
         hasReal = true;
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
         {
-            GameObject.Find("Player").GetComponent<Player>().currentHealth--;
-            GameObject.Find("Player").GetComponent<Player>().currentHealth--;
+            playerStats.TakeDamage(1);
+            playerStats.TakeDamage(1);
             Destroy(gameObject);
         }
     }

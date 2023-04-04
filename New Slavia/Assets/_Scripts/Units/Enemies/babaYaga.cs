@@ -12,23 +12,22 @@ public class babaYaga : MonoBehaviour
 
     private Transform player;
 
-    void Start()
+    private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;     
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
-   
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if(Vector2.Distance(transform.position, player.position)>stoppingDistance)
+        if (Vector2.Distance(transform.position, player.position) > stoppingDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
         }
-        else if(Vector2.Distance(transform.position, player.position) < stoppingDistance && Vector2.Distance(transform.position,player.position) >retreateDistance)
+        else if (Vector2.Distance(transform.position, player.position) < stoppingDistance && Vector2.Distance(transform.position, player.position) > retreateDistance)
         {
             transform.position = this.transform.position;
         }
-        else if(Vector2.Distance(transform.position, player.position)<retreateDistance)
+        else if (Vector2.Distance(transform.position, player.position) < retreateDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
         }
@@ -36,27 +35,28 @@ public class babaYaga : MonoBehaviour
 
     public void HealCheck()
     {
-        heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
+        heal = heal - player.GetComponent<PlayerStats>().Damage.GetValue();
         if (heal <= 0)
         {
             Destroy(this.gameObject);
         }
     }
 
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+        {
+            playerStats.TakeDamage(1);
+            Destroy(gameObject);
+        }
         switch (collision.gameObject.tag)
         {
             case "Bullet":
                 HealCheck();
                 Destroy(collision.gameObject);
                 break;
+
             case "Enemy":
-                break;
-            case "Player":
-                GameObject.Find("Player").GetComponent<Player>().currentHealth--;
-                Destroy(gameObject);
                 break;
         }
     }

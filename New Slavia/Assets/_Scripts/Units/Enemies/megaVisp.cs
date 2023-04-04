@@ -8,19 +8,17 @@ public class megaVisp : MonoBehaviour
     public GameObject visp;
     public float heal;
     public float speed = 2;
-    Vector2 upLeft, upRight, downLeft, downRight;
+    private Vector2 upLeft, upRight, downLeft, downRight;
 
     public Vector2 direction = new Vector2(1, 0);
 
     public Vector2 velocity;
 
-
-    void Start()
+    private void Start()
     {
     }
 
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         velocity = direction * speed;
         Vector2 pos = transform.position;
@@ -56,29 +54,27 @@ public class megaVisp : MonoBehaviour
 
     public void HealCheck()
     {
-        heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
-        if (heal <= 0)
-        {
-            separateVisps();
-            Destroy(gameObject);
-
-        }
+        //heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
+        //if (heal <= 0)
+        //{
+        //    separateVisps();
+        //    Destroy(gameObject);
+        //}
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+        {
+            playerStats.TakeDamage(1);
+            playerStats.TakeDamage(1);
+            Destroy(gameObject);
+        }
         switch (collision.gameObject.tag)
         {
             case "Bullet":
                 HealCheck();
                 Destroy(collision.gameObject);
-                break;
-            case "Enemy":
-                break;
-            case "Player":
-                GameObject.Find("Player").GetComponent<Player>().currentHealth--;
-                Destroy(gameObject);
                 break;
         }
     }

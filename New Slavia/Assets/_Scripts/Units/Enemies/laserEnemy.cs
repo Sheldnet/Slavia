@@ -11,57 +11,51 @@ public class laserEnemy : MonoBehaviour
     public float speedUpDown = 0;
 
     public float movingDelay = 0f;
-    float movingTimer = 0f;
+    private float movingTimer = 0f;
 
     public float shootDelay = 0f;
-    float shootTimer = 0f;
+    private float shootTimer = 0f;
 
-    bool isMoving = true;
-    bool isSlide = false;
+    private bool isMoving = true;
+    private bool isSlide = false;
 
     private int i;
     public Transform[] points;
-    Vector2[] upDown = new Vector2[2];
+    private Vector2[] upDown = new Vector2[2];
 
-    float speed;
+    private float speed;
 
-
-    void Start()
+    private void Start()
     {
         speed = speedUpDown;
         hasReal = true;
     }
 
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if(movingDelay <= movingTimer && isMoving)
+        if (movingDelay <= movingTimer && isMoving)
         {
             speedRight = 0;
             upDown[0] = points[0].position;
             upDown[1] = points[1].position;
             movingTimer = 0;
             isMoving = false;
-            isSlide = true;           
+            isSlide = true;
         }
-        else if(movingDelay > movingTimer && isMoving)
+        else if (movingDelay > movingTimer && isMoving)
         {
-
             this.gameObject.transform.position += new Vector3(-speedRight * Time.deltaTime, 0, 0);
             movingTimer += Time.deltaTime;
         }
-
 
         if (shootDelay <= shootTimer && !isMoving && isSlide)
         {
             gunLas.autoShoot = true;
             StartCoroutine(speedStop());
             shootTimer = 0;
-            
         }
         else if (shootDelay > shootTimer && !isMoving && isSlide)
         {
-
             if (Vector2.Distance(transform.position, upDown[i]) < 0.02f)
             {
                 i++;
@@ -78,32 +72,30 @@ public class laserEnemy : MonoBehaviour
 
     public void HealCheck()
     {
-        heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
-        if (heal <= 0)
-        {
-            Destroy(this.gameObject);
-        }
+        //heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
+        //if (heal <= 0)
+        //{
+        //    Destroy(this.gameObject);
+        //}
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+        {
+            playerStats.TakeDamage(1);
+            Destroy(gameObject);
+        }
         switch (collision.gameObject.tag)
         {
             case "Bullet":
                 HealCheck();
                 Destroy(collision.gameObject);
                 break;
-            case "Enemy":
-                break;
-            case "Player":
-                GameObject.Find("Player").GetComponent<Player>().currentHealth--;
-                Destroy(gameObject);
-                break;
         }
     }
 
-    IEnumerator speedStop()
+    private IEnumerator speedStop()
     {
         speedUpDown = 0;
 
@@ -111,12 +103,14 @@ public class laserEnemy : MonoBehaviour
 
         speedUpDown = speed;
     }
+
     private void OnBecameInvisible()
-    {       
+    {
         hasReal = false;
     }
+
     private void OnBecameVisible()
-    {       
+    {
         hasReal = true;
     }
 }

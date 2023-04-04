@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class teleportMoving : MonoBehaviour
 {
     public float heal;
@@ -12,31 +11,26 @@ public class teleportMoving : MonoBehaviour
     public Transform teleportDown;
     public Transform teleportOrigin;
 
-
     private bool hasReal;
     public float speed = 0;
 
     public float teleportDelay = 0f;
     public float movingDelay = 0f;
 
-    float teleportTimer = 0f;
-    float movingTimer = 0f;
-    string upDown ="middle";
-    bool isMoving = true;
+    private float teleportTimer = 0f;
+    private float movingTimer = 0f;
+    private string upDown = "middle";
+    private bool isMoving = true;
 
-    Vector2 up, down, middle;
+    private Vector2 up, down, middle;
 
-
-
-    void Start()
+    private void Start()
     {
         hasReal = true;
     }
 
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        
         if (movingTimer > movingDelay && isMoving)
         {
             down = teleportDown.transform.position;
@@ -50,7 +44,6 @@ public class teleportMoving : MonoBehaviour
         {
             movingTimer += Time.deltaTime;
             this.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
-
         }
 
         if (teleportTimer >= teleportDelay && gunLay.autoShoot)
@@ -74,7 +67,8 @@ public class teleportMoving : MonoBehaviour
         gameObject.GetComponent<Animator>().SetTrigger("Teleport");
         Invoke("Teleport1", 0.7f);
     }
-    void Teleport1()
+
+    private void Teleport1()
     {
         switch (upDown)
         {
@@ -84,12 +78,14 @@ public class teleportMoving : MonoBehaviour
                 Debug.Log("mid");
                 upDown = "up";
                 break;
+
             case "up":
                 this.gameObject.transform.position = down;
                 gunLay.autoShoot = true;
                 upDown = "down";
                 Debug.Log("up");
                 break;
+
             case "down":
                 this.gameObject.transform.position = middle;
                 gunLay.autoShoot = true;
@@ -109,16 +105,18 @@ public class teleportMoving : MonoBehaviour
 
     public void HealCheck()
     {
-        heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
-        if (heal <= 0)
-        {
-            Destroy(this.gameObject);
-        }
+        //heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
+        //if (heal <= 0)
+        //{
+        //    Destroy(this.gameObject);
+        //}
     }
+
     private void OnBecameInvisible()
     {
         hasReal = false;
     }
+
     private void OnBecameVisible()
     {
         hasReal = true;

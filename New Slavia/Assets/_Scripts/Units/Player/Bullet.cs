@@ -1,31 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float Damage;
-    [SerializeField] private float Speed;
-    [SerializeField] private float Range;
+    [SerializeField] private float _Damage;
+    [SerializeField] private float _Speed;
+    [SerializeField] private float _Range;
 
-    private Vector3 startPos;
+    private Vector3 _startPos;
+    private Rigidbody2D _rb;
+    private ObjectPool<Bullet> _ownerPool;
 
-    private void Start()
+    private void Awake()
     {
-        Damage = GameObject.Find("Player").GetComponent<Player>().finalDamage; //Получение урона
-        Speed = GameObject.Find("Player").GetComponent<Player>().finalShootSpeed; //Получение скорости полета
-        Range = GameObject.Find("Player").GetComponent<Player>().finalRange; //Получения дальности атаки
-        startPos = transform.position;
+        _rb = GetComponent<Rigidbody2D>();
+    }
+
+    public void Initialize(float damage, float speed, float range, ObjectPool<Bullet> ownerObjectPool)
+    {
+        _Damage = damage;
+        _Speed = speed;
+        _Range = range;
+        _startPos = transform.position;
+        _ownerPool = ownerObjectPool;
+
+        _rb.velocity = _Speed * transform.right;
     }
 
     private void Update()
     {
-        transform.Translate(Vector2.right * Speed * Time.deltaTime); //Полет пули
-        if (Mathf.Abs(Vector3.Distance(startPos, transform.position)) >= Range) DestroyBullet(); //Уничтожение по достижению макс расстояния полета
+        if (Mathf.Abs(Vector3.Distance(_startPos, transform.position)) >= _Range)
+        {
+            DestroyBullet();//Уничтожение по достижению макс расстояния полета
+        }
     }
 
     private void DestroyBullet()
     {
-        Destroy(gameObject);
+        _ownerPool.Release(this);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<EnemyStats>(out EnemyStats enemyStats))
+        {
+            enemyStats.TakeDamage(_Damage);
+        }
+        DestroyBullet();
     }
 }

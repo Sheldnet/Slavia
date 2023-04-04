@@ -7,19 +7,17 @@ public class basicEnemy : MonoBehaviour
     public float heal;
     private bool hasReal;
     public float speed = 2;
-    public bool loop =false;
+    public bool loop = false;
 
     public Vector2 direction = new Vector2(1, 0);
     public Vector2 velocity;
 
-
-    void Start()
+    private void Start()
     {
-       hasReal = true;
+        hasReal = true;
     }
 
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         velocity = direction * speed;
         Vector2 pos = transform.position;
@@ -40,30 +38,29 @@ public class basicEnemy : MonoBehaviour
         }
     }
 
-
     public void HealCheck()
     {
-        heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
-        if (heal <= 0)
-        {
-            Destroy(this.gameObject);
-        }
+        //heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
+        //if (heal <= 0)
+        //{
+        //    Destroy(this.gameObject);
+        //}
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        switch(collision.gameObject.tag)
+        if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+        {
+            playerStats.TakeDamage(1);
+
+            Destroy(gameObject);
+        }
+
+        switch (collision.gameObject.tag)
         {
             case "Bullet":
                 HealCheck();
                 Destroy(collision.gameObject);
-                break;
-            case "Enemy":
-                break;
-            case "Player":
-                GameObject.Find("Player").GetComponent<Player>().currentHealth--;
-                Destroy(this.gameObject);
                 break;
         }
     }
@@ -72,6 +69,7 @@ public class basicEnemy : MonoBehaviour
     {
         hasReal = false;
     }
+
     private void OnBecameVisible()
     {
         hasReal = true;

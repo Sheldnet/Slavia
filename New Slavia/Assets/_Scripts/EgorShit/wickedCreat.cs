@@ -11,7 +11,6 @@ public class wickedCreat : MonoBehaviour
     //public Transform teleportDown;
     //public Transform teleportOrigin;
 
-
     private bool hasReal;
     public float speed = 0;
 
@@ -24,29 +23,27 @@ public class wickedCreat : MonoBehaviour
     //bool isMoving = true;
 
     //Vector2 up, down, middle;
-    float sizeX;
-    float sizeY;
+    private float sizeX;
+
+    private float sizeY;
     public BoxCollider2D goCol;
-    float recSizeX;
-    float recSizeY;
-    Vector3 final;
-    bool target = false;
+    private float recSizeX;
+    private float recSizeY;
+    private Vector3 final;
+    private bool target = false;
 
-
-    void Start()
+    private void Start()
     {
         hasReal = true;
-        sizeX = goCol.size.x/2;
-        sizeY = goCol.size.y/2;
-
+        sizeX = goCol.size.x / 2;
+        sizeY = goCol.size.y / 2;
     }
 
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         this.gameObject.transform.position += new Vector3(-speed * Time.deltaTime, 0, 0);
-        if(target)
-            this.transform.position = Vector3.MoveTowards(this.transform.position, final, 2f*speed * Time.deltaTime);
+        if (target)
+            this.transform.position = Vector3.MoveTowards(this.transform.position, final, 2f * speed * Time.deltaTime);
 
         //if (movingTimer > movingDelay && isMoving)
         //{
@@ -80,8 +77,6 @@ public class wickedCreat : MonoBehaviour
         //}
     }
 
-
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Respawn")
@@ -93,30 +88,37 @@ public class wickedCreat : MonoBehaviour
             float minX = collision.gameObject.transform.position.x - recSizeX + sizeX;
             float maxY = collision.gameObject.transform.position.y + recSizeY - sizeY;
             float minY = collision.gameObject.transform.position.y - recSizeY + sizeY;
-            Debug.Log(" xX =" + maxX + " nX =" + minX+" xY ="+maxY+" ny ="+minY);
+            Debug.Log(" xX =" + maxX + " nX =" + minX + " xY =" + maxY + " ny =" + minY);
             final = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
             Debug.Log(final);
             target = true;
         }
         else if (collision.gameObject.tag != "Enemy")
         {
-            HealCheck();
+            if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+            {
+                heal -= playerStats.Damage.GetValue();
+                if (heal <= 0)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
         }
     }
 
-
-    public void HealCheck()
-    {
-        heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
-        if (heal <= 0)
-        {
-            Destroy(this.gameObject);
-        }
-    }
+    //public void HealCheck()
+    //{
+    //    heal = heal - GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
+    //    if (heal <= 0)
+    //    {
+    //        Destroy(this.gameObject);
+    //    }
+    //}
     private void OnBecameInvisible()
     {
         hasReal = false;
     }
+
     private void OnBecameVisible()
     {
         hasReal = true;

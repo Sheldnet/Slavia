@@ -12,16 +12,14 @@ public class bulletAim : MonoBehaviour
     public Transform player;
     public Vector2 target;
 
-    void Start()
+    private void Start()
     {
         hasReal = true;
         player = GameObject.FindGameObjectWithTag("Player").transform;
         target = new Vector2(player.position.x, player.position.y);
     }
 
-
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
         if (transform.position.x == target.x && transform.position.y == target.y)
@@ -35,16 +33,18 @@ public class bulletAim : MonoBehaviour
         hasReal = false;
         Destroy(this.gameObject);
     }
+
     private void OnBecameVisible()
     {
         hasReal = true;
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
         {
-            GameObject.Find("Player").GetComponent<Player>().currentHealth--;
-            GameObject.Find("Player").GetComponent<Player>().currentHealth--;
+            playerStats.TakeDamage(1);
+            playerStats.TakeDamage(1);
             Destroy(gameObject);
         }
     }

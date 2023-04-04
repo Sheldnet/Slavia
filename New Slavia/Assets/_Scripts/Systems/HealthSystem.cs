@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
 {
-    public Player pl;
+    [SerializeField] private PlayerStats _playerStats;
     public Image[] hearts;
     public Sprite fullHeart;
     public Sprite halfHeart;
@@ -18,7 +18,7 @@ public class HealthSystem : MonoBehaviour
             img.sprite = emptyHeart;
         }
 
-        for (int i = 0; i < pl.currentHealth; i++)
+        for (int i = 0; i < _playerStats.GetCurrentHealth(); i++)
         {
             if (i % 2 == 0)
             {

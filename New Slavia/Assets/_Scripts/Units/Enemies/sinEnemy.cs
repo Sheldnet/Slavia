@@ -7,7 +7,7 @@ public class sinEnemy : MonoBehaviour
     public float amplitude = 2;
     public float frequency = 0.5f;
 
-    float sinCenterY;
+    private float sinCenterY;
 
     public float heal;
     public float speed = 2;
@@ -16,13 +16,13 @@ public class sinEnemy : MonoBehaviour
     public Vector2 velocity;
 
     public bool inverted = false;
-    void Start()
+
+    private void Start()
     {
         sinCenterY = transform.position.y;
     }
 
-    
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Vector2 pos = transform.position;
         float sin = Mathf.Sin(pos.x * frequency) * amplitude;
@@ -45,27 +45,25 @@ public class sinEnemy : MonoBehaviour
 
     public void HealCheck()
     {
-        heal=heal-GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
-        if (heal <= 0)
-        {
-            Destroy(this.gameObject);
-        }
+        //heal=heal-GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().finalDamage;
+        //if (heal <= 0)
+        //{
+        //    Destroy(this.gameObject);
+        //}
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
+        {
+            playerStats.TakeDamage(1);
+            Destroy(gameObject);
+        }
         switch (collision.gameObject.tag)
         {
             case "Bullet":
                 HealCheck();
                 Destroy(collision.gameObject);
-                break;
-            case "Enemy":
-                break;
-            case "Player":
-                GameObject.Find("Player").GetComponent<Player>().currentHealth--;
-                Destroy(gameObject);
                 break;
         }
     }
