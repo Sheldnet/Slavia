@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Schema;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
 
 public class PlayerStatsController : MonoBehaviour
 {
@@ -10,14 +11,13 @@ public class PlayerStatsController : MonoBehaviour
 
     public bool isDead = false;
 
-    public float FinalDamage;
-    public float FinalBulletSpeed;
-    public float FinalRange;
-    public float FinalItemPickupRange;
+    //public float FinalDamage;
+    //public float FinalBulletSpeed;
+    //public float FinalRange;
+    //public float FinalItemPickupRange;
     [SerializeField] private float ItemPickupRangeRadius;
-    [SerializeField] private float ItemPickupRangeMul;
 
-    [SerializeField] private float DamageReduction;
+    [SerializeField] private float ItemPickupRangeMul;
 
     public GameObject ItemPickupRange;
     //public float xMaxborder;
@@ -56,25 +56,13 @@ public class PlayerStatsController : MonoBehaviour
         if (collider.TryGetComponent<ItemWorld>(out ItemWorld itemWorld))
         {
             inventory.AddItem(itemWorld.GetItem());
+            Debug.Log("Столкновение");
+            itemWorld.GetBuff().BuffUnit(inventory.GetItemList().FirstOrDefault(item => item.itemType == itemWorld.GetItem().itemType), _playerStats.gameObject);
+            //if (itemWorld.TryGetComponent<IItem>(out IItem item))
+            //{
+            //    item.BuffUnit(itemWorld.GetItem(), this.gameObject);
+            //}
             itemWorld.DestroySelf();
-        }
-        switch (collider.tag)
-        {
-            case "ExpOrb":
-                if (collider != null)
-                {
-                    _playerStats.TakeExperience(_playerStats.FinalExp);
-                    Destroy(collider.gameObject);
-                }
-                break;
-
-            case "GoldOrb":
-                if (collider != null)
-                {
-                    _playerStats.TakeGold(_playerStats.FinalGold);
-                    Destroy(collider.gameObject);
-                }
-                break;
         }
     }
 
@@ -96,14 +84,14 @@ public class PlayerStatsController : MonoBehaviour
                 _playerStats.BulletSpeed.SetMultiplier(2);
                 _playerStats.Damage.SetMultiplier(2);
                 _playerStats.AttackSpeed.SetMultiplier(0.5f);
-                _playerStats.Range.SetMultiplier(2);
+                _playerStats.AttackRange.SetMultiplier(2);
                 break;
 
             case (3): //Короткий выстрел
                 _playerStats.BulletSpeed.SetMultiplier(1);
                 _playerStats.Damage.SetMultiplier(0.5f);
                 _playerStats.AttackSpeed.SetMultiplier(2);
-                _playerStats.Range.SetMultiplier(0.5f);
+                _playerStats.AttackRange.SetMultiplier(0.5f);
                 break;
 
             default: //Дефолт, обычный выстрел
@@ -122,7 +110,7 @@ public class PlayerStatsController : MonoBehaviour
     private void Update()
     {
         float BonusMoveSpeed = 0;
-        float BonusDamage = 0;
+        //float BonusDamage = 0;
         float BonusAttackSpeed = 0;
 
         float BonusBulletSpeed = 0;
@@ -133,97 +121,97 @@ public class PlayerStatsController : MonoBehaviour
 
         //Fire opal, sand clock, magic book, lucky coin
         float BonusGold = 0;
-        float BonusExp = 0;
         float BonusHealth = 0;
         foreach (Item item in inventory.GetItemList())
         {
             switch (item.itemType)
             {
                 default:
-                case Item.ItemType.Apple:
-                    {
-                        BonusDamage = _playerStats.Damage.GetValue() / 10f * item.amount;
-                    }
-                    break;
+                //case Item.ItemType.Apple:
+                //    {
+                //        BonusDamage = _playerStats.Damage.GetValue() / 10f * item.amount;
+                //    }
+                //    break;
 
-                case Item.ItemType.BullHeart:
-                    {
-                        BonusMaxHealth = _playerStats.MaxHealth / 5f * item.amount;
-                    }
-                    break;
+                //case Item.ItemType.BullHeart:
+                //    {
+                //        BonusMaxHealth = _playerStats.MaxHealth / 5f * item.amount;
+                //    }
+                //    break;
 
                 case Item.ItemType.ShadowInABottle:
-                    {
-                        BonusAttackSize = 6f / 10f * item.amount;
-                    }
+                    //{
+                    //    BonusAttackSize = 6f / 10f * item.amount;
+                    //}
                     break;
 
                 case Item.ItemType.BirchLeaves:
                     {
-                        BonusBulletSpeed = _playerStats.BulletSpeed.GetValue() / 10f * item.amount;
+                        //BonusBulletSpeed = _playerStats.BulletSpeed.GetValue() / 10f * item.amount;
                     }
                     break; //10
                 case Item.ItemType.SnakeSkin:
                     {
-                        DamageReduction = 2 * item.amount;
+                        //_playerStats.DamageReduction = 2 * item.amount;
                     }
                     break;
 
                 case Item.ItemType.PigeonFeather:
                     {
-                        BonusMoveSpeed = _playerMovement.MoveSpeed.GetValue() / 10f * item.amount;
+                        //BonusMoveSpeed = _playerMovement.MoveSpeed.GetValue() / 10f * item.amount;
                     }
                     break;
 
                 case Item.ItemType.Magnet:
                     {
-                        BonusItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul / 10f * item.amount;
+                        //BonusItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul / 10f * item.amount;
                     }
                     break;
 
                 case Item.ItemType.LuckyCoin:
                     {
-                        if (_playerStats.GoldFromOrb * (_playerStats.GoldFactor * item.amount + 1) > BonusGold)
-                            BonusGold = _playerStats.GoldFromOrb * (_playerStats.GoldFactor * item.amount + 1);
-                        _playerStats.FinalGold = BonusGold;
+                        //if (TryGetComponent<MoneySystem>(out MoneySystem playerGold))
+                        //{
+                        //    playerGold.BuffGold(item); //Пофиксить чтоб сбрасывало это значение
+                        //}
                     }
                     break;
 
                 case Item.ItemType.MagicBook:
                     {
-                        if (_playerStats.ExperienceFromOrb * (_playerStats.ExperienceFactor * item.amount + 1) != BonusExp)
-                            BonusExp = _playerStats.ExperienceFromOrb * (_playerStats.ExperienceFactor * item.amount + 1);
-                        _playerStats.FinalExp = BonusExp;
+                        //if (TryGetComponent<ExperienceSystem>(out ExperienceSystem playerExperience))
+                        //{
+                        //    playerExperience.BuffExperience(item);
+                        //}
                     }
                     break;
 
                 case Item.ItemType.FireOpal:
-                    {
-                        BonusHealth = _playerStats.healthFactor * item.amount;
-                    }
+                    //{
+                    //    BonusHealth = _playerStats.healthFactor * item.amount;
+                    //}
                     break;
             }
         }
-
+        //Размер пули лучше передовать отсюда в атаку, из атаки в пули
         //Bullet.gameObject.transform.localScale = new Vector2(6 + BonusAttackSize, 6 + BonusAttackSize);
-        _playerStats.TakeDamage(-BonusHealth);
-        _playerStats.MaxHealth = 6 + BonusMaxHealth;
+        // Сделайте хилл при касании
+        // Все, что касается уровня и денег в отдельные скрипты
+        //_playerStats.TakeDamage(-BonusHealth);
+        //_playerStats.MaxHealth += BonusMaxHealth;
 
-        _playerStats.Damage.SetBonus(BonusDamage);
-        _playerStats.Damage.SetBonus(BonusBulletSpeed);
-        _playerMovement.MoveSpeed.SetBonus(BonusMoveSpeed);
+        //_playerStats.Damage.SetBonus(BonusDamage);
+        //_playerStats.BulletSpeed.SetBonus(BonusBulletSpeed);
+        //_playerMovement.MoveSpeed.SetBonus(BonusMoveSpeed);
 
         //Конечная скорость атаки
+        //Эти значения не передаются в пули СЕЙЧАС
+        //_playerStats.PickUpRange.SetMultiplier(ItemPickupRangeMul);
+        //_playerStats.PickUpRange.SetBonus(BonusItemPickupRange);
 
-        FinalDamage = _playerStats.Damage.GetValue(); //Конечный урон
-        FinalBulletSpeed = _playerStats.BulletSpeed.GetValue(); //Конечная скорость полета пули
-        FinalRange = _playerStats.Range.GetValue(); //Конечная дальность атаки
-                                                    //Эти значения не передаются в пули СЕЙЧАС
-        FinalItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul + BonusItemPickupRange;
+        //ItemPickupRange.GetComponent<CircleCollider2D>().radius = _playerStats.PickUpRange.GetValue();
 
-        ItemPickupRange.GetComponent<CircleCollider2D>().radius = FinalItemPickupRange;
-
-        uiStats.SetStats(_playerMovement.MoveSpeed.GetValue(), FinalDamage, _shooting.AttackCD, FinalBulletSpeed, FinalRange, _shooting.CurrentBullet.transform.localScale.x, _playerStats.MaxHealth, DamageReduction, FinalItemPickupRange);
+        uiStats.SetStats(_playerMovement.MoveSpeed.GetValue(), _playerStats.Damage.GetValue(), _shooting.AttackCD, _playerStats.BulletSpeed.GetValue(), _playerStats.AttackRange.GetValue(), _shooting.CurrentBullet.transform.localScale.x, _playerStats.MaxHealth, _playerStats.DamageReduction, _playerStats.PickUpRange.GetValue());
 
         //Ввод пользователя для управления и стрельбы
 

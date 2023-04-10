@@ -4,31 +4,44 @@ using UnityEngine;
 
 public class ItemWorld : MonoBehaviour
 {
-    public static ItemWorld SpawnItemWorld(Vector3 position, Item item) {
+    private Item item;
+    private SpriteRenderer spriteRenderer;
+    private IItem _item_V;
+
+    public static ItemWorld SpawnItemWorld(Vector3 position, Item item, IItem item_V)
+    {
         Transform transform = Instantiate(ItemAssets.Instance.pfItemWorld, position, Quaternion.identity);
 
         ItemWorld itemWorld = transform.GetComponent<ItemWorld>();
-        itemWorld.SetItem(item);
+        itemWorld.InitializeItemWorld(item, item_V);
 
         return itemWorld;
     }
-    private Item item;
-    private SpriteRenderer spriteRenderer;
 
-    private void Awake() {
+    private void Awake()
+    {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    public void SetItem(Item item) {
+
+    public void InitializeItemWorld(Item item, IItem item_V)
+    {
         this.item = item;
         spriteRenderer.sprite = item.GetSprite();
+        this._item_V = item_V;
     }
 
-    public Item GetItem() {
+    public Item GetItem()
+    {
         return item;
     }
 
-    public void DestroySelf() {
+    public IItem GetBuff()
+    {
+        return _item_V;
+    }
+
+    public void DestroySelf()
+    {
         Destroy(gameObject);
     }
 }
- 

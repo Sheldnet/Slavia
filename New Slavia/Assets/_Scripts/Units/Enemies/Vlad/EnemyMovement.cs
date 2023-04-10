@@ -28,7 +28,7 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (transform.position.x > _playerTransform.position.x)
+        if (transform.position.x >= _playerTransform.position.x)
         {
             _movingDirection = _playerTransform.position - transform.position;
             if (transform.position.x > _playerEdgePoint.position.x)

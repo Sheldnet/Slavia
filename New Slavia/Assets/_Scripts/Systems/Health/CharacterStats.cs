@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CharacterStats : MonoBehaviour
 {
-    [SerializeField] private float maxHealth;
+    [SerializeField] public float MaxHealth;
     private float _currentHealth;
     public float healthFactor;
     public Stat Damage;
     public Stat AttackSpeed;
-    public Stat Range;
+    public Stat AttackRange;
 
     protected virtual void Awake()
     {
-        _currentHealth = maxHealth;
+        _currentHealth = MaxHealth;
     }
 
     public void TakeDamage(float damage)
@@ -22,18 +22,6 @@ public class CharacterStats : MonoBehaviour
         if (_currentHealth <= 0)
         {
             Die();
-        }
-    }
-
-    public float MaxHealth
-    {
-        get
-        {
-            return maxHealth;
-        }
-        set
-        {
-            maxHealth = value;
         }
     }
 

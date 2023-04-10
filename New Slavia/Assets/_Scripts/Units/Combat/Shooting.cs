@@ -79,8 +79,8 @@ public class Shooting : MonoBehaviour
         bullet.gameObject.SetActive(true);
         bullet.transform.position = _shotPoint.position;
         bullet.transform.rotation = Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward);
-        bullet.Initialize(_playerStatsController.FinalDamage,
-                _playerStatsController.FinalBulletSpeed, _playerStatsController.FinalRange, this._bulletPool);
+        bullet.Initialize(_playerStats.Damage.GetValue(),
+                _playerStats.BulletSpeed.GetValue(), _playerStats.AttackRange.GetValue(), this._bulletPool);
     }
 
     private void BackBulletToPool(Bullet bullet)

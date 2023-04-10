@@ -5,9 +5,12 @@ using UnityEngine;
 public class ItemWorldSpawner : MonoBehaviour
 {
     public Item item;
+    private IItem _item;
 
-    private void Awake() {
-        ItemWorld.SpawnItemWorld(transform.position, item);
-        Destroy(gameObject);
+    private void Awake()
+    {
+        _item = GetComponent<IItem>();
+        ItemWorld.SpawnItemWorld(transform.position, item, _item);
+        // Destroy(gameObject);
     }
 }

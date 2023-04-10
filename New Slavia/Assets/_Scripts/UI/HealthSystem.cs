@@ -18,14 +18,6 @@ public class HealthSystem : MonoBehaviour
     public float velocityDmg;
     public float velocityHeal;
 
-    public Image expBar;
-    public TMP_Text levelText;
-    public float fillExp;
-    public float velocityExp;
-
-    public TMP_Text goldText;
-    public float velocityGold;
-
     //private void FixedUpdate()
     //{
     //    foreach (Image img in hearts)
@@ -47,42 +39,20 @@ public class HealthSystem : MonoBehaviour
     //}
     private void Start()
     {
-        fillHeal = 1f;
-        velocityDmg = 0.1f;
-        velocityHeal = 0.1f;
-
-        fillExp = 0f;
-        velocityExp = 0.1f;
+        Debug.Log(_playerStats.AttackSpeed.GetValue());
     }
 
     private void FixedUpdate()
     {
-        healMan();
-        expMan();
-        goldMan();
+        HealMan();
     }
 
-    public void healMan()
+    public void HealMan()
     {
         fillHeal = _playerStats.GetCurrentHealth() / _playerStats.MaxHealth;
         if (healtBar.fillAmount > fillHeal)
             healtBar.fillAmount -= velocityDmg * Time.deltaTime;
         else if (healtBar.fillAmount <= fillHeal)
             healtBar.fillAmount += velocityDmg * Time.deltaTime;
-    }
-
-    public void expMan()
-    {
-        levelText.text = _playerStats.Level.ToString();
-        fillExp = _playerStats.CurrentExperience / _playerStats.MaxExperience;
-        if (expBar.fillAmount <= fillExp && fillExp != 0)
-            expBar.fillAmount += fillExp * Time.deltaTime;
-        else if (expBar.fillAmount == 1)
-            expBar.fillAmount = 0;
-    }
-
-    public void goldMan()
-    {
-        goldText.text = _playerStats.CurrentGold.ToString();
     }
 }
