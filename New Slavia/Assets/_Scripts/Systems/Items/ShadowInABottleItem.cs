@@ -6,9 +6,9 @@ public class ShadowInABottleItem : MonoBehaviour, IItem
 {
     public void BuffUnit(Item item, GameObject player)
     {
-        if (player.TryGetComponent<PlayerStats>(out var playerStats))
+        if (player.TryGetComponent<Shooting>(out var playerShooting))
         {
-            Debug.Log("врн декюрэ я пюглепнл оскх");
+            playerShooting.BulletSize.SetBonus(playerShooting.BulletSize.GetValue() / 10 * item.amount);
         }
     }
 }

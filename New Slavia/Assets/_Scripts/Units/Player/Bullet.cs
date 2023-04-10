@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Initialize(float damage, float speed, float range, ObjectPool<Bullet> ownerObjectPool)
+    public void Initialize(float damage, float speed, float range, float size, ObjectPool<Bullet> ownerObjectPool)
     {
         _Damage = damage;
         _Speed = speed;

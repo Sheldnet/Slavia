@@ -22,6 +22,8 @@ public class Shooting : MonoBehaviour
     private PlayerStats _playerStats;
     private PlayerStatsController _playerStatsController;
 
+    public Stat BulletSize;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -57,9 +59,6 @@ public class Shooting : MonoBehaviour
         AttackCD = 1 / (_playerStats.AttackSpeed.GetValue());
         if (_currentAttackCooldown <= 0)
         {
-            //Bullet bullet = Instantiate(CurrentBullet, _shotPoint.position, Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward));
-            //bullet.Initialize(_playerStatsController.FinalDamage,
-            //    _playerStatsController.FinalBulletSpeed, _playerStatsController.FinalRange, this);
             _bulletPool.Get();
             _currentAttackCooldown = 1 / AttackCD;
         }
@@ -80,7 +79,7 @@ public class Shooting : MonoBehaviour
         bullet.transform.position = _shotPoint.position;
         bullet.transform.rotation = Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward);
         bullet.Initialize(_playerStats.Damage.GetValue(),
-                _playerStats.BulletSpeed.GetValue(), _playerStats.AttackRange.GetValue(), this._bulletPool);
+                _playerStats.BulletSpeed.GetValue(), _playerStats.AttackRange.GetValue(), BulletSize.GetValue(), this._bulletPool);
     }
 
     private void BackBulletToPool(Bullet bullet)
