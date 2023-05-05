@@ -7354,7 +7354,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2021559450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7369,7 +7369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitPerSecond: 1
   _enemies:
-  - {fileID: 1496479520922005990, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
+  - {fileID: 2088094521}
   _spawnZones:
   - {fileID: 36735530}
   - {fileID: 1270625428}
@@ -7507,6 +7507,17 @@ Transform:
   m_Father: {fileID: 2131967176}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2088094521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1496479520922005990, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
+  m_PrefabInstance: {fileID: 1496479522316296478}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7273d8831d317d4408f3f243351c8696, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2088304378
 GameObject:
   m_ObjectHideFlags: 0
@@ -7682,13 +7693,13 @@ GameObject:
   - component: {fileID: 2131967179}
   - component: {fileID: 768164789779520146}
   - component: {fileID: 1897393385043902748}
-  - component: {fileID: 1897393385043902749}
   - component: {fileID: 1897393385043902750}
   - component: {fileID: 1897393385043902754}
   - component: {fileID: 1897393385043902751}
   - component: {fileID: 1897393385043902752}
   - component: {fileID: 1897393385043902753}
   - component: {fileID: 1897393385043902755}
+  - component: {fileID: 1897393385043902756}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -7878,6 +7889,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1496479520922005990, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
+      propertyPath: MaxHealth
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496479520922005990, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
+      propertyPath: _InvincibilityDuration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496479520922005993, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
+      propertyPath: _Force
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496479520922005993, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
+      propertyPath: _Speed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1496479520922005993, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
+      propertyPath: _ReppeledTime
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1496479520922005994, guid: 0b1f2fe8aef517648a831643a369c98d, type: 3}
       propertyPath: m_Name
       value: Visp (9)
@@ -7899,28 +7930,6 @@ MonoBehaviour:
   MoveSpeed:
     _baseValue: 5
     _multiplier: 1
-    _bonusValue: 0
---- !u!114 &1897393385043902749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2131967174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b55aa9f3ec7ded4f86c745deceebea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentBullet: {fileID: 0}
-  _bulletSmall: {fileID: 418059151147548, guid: c0ddd9281165d5f43895aa4c3d6c62d9, type: 3}
-  _bulletMedium: {fileID: 9184792476130922338, guid: d1a8642c0c6b870428e4c5ac5a28fddd, type: 3}
-  _bulletLarge: {fileID: 882740096829133468, guid: 9e696912eead73744b79394aee377157, type: 3}
-  AttackCD: 1
-  _shotPoint: {fileID: 2032651096}
-  BulletSize:
-    _baseValue: 0
-    _multiplier: 0
     _bonusValue: 0
 --- !u!114 &1897393385043902750
 MonoBehaviour:
@@ -7957,6 +7966,14 @@ MonoBehaviour:
     _multiplier: 1
     _bonusValue: 0
   DamageReduction: 1
+  BulletSize:
+    _baseValue: 0
+    _multiplier: 0
+    _bonusValue: 0
+  CritChance:
+    _baseValue: 0
+    _multiplier: 0
+    _bonusValue: 0
 --- !u!114 &1897393385043902751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8085,6 +8102,50 @@ MonoBehaviour:
   _goldFromOrb: 5
   FinalGold: 0
   _bonusGold: 0
+--- !u!114 &1897393385043902756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131967174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9f36de9811c19479774e3b84cbfdd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Bullet: {fileID: 8042466622264029392, guid: c0ddd9281165d5f43895aa4c3d6c62d9, type: 3}
+  AttackInterval: 1
+  _shotPoint: {fileID: 2032651096}
+  _ActiveTime: 10
+  _ReloadTime: 10
+  _BulletsCountInShot: 1
+  _CritChancePercent: 100
+  Damage:
+    _baseValue: 5
+    _multiplier: 1
+    _bonusValue: 0
+  BulletCritMultiplier: 1
+  Speed:
+    _baseValue: 10
+    _multiplier: 1
+    _bonusValue: 0
+  Range:
+    _baseValue: 10
+    _multiplier: 1
+    _bonusValue: 0
+  BulletSize:
+    _baseValue: 2
+    _multiplier: 1
+    _bonusValue: 0
+  PiercingCount:
+    _baseValue: 2
+    _multiplier: 1
+    _bonusValue: 0
+  PushForce:
+    _baseValue: 5
+    _multiplier: 1
+    _bonusValue: 0
 --- !u!1001 &1995352972675879719
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -7,6 +7,8 @@ public class PlayerStats : CharacterStats
     public Stat BulletSpeed;
     public Stat PickUpRange;
     public float DamageReduction;
+    public Stat BulletSize;
+    public Stat CritChance;
 
     protected override void Awake()
     {

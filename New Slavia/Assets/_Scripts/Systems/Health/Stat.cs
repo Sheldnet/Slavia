@@ -7,7 +7,7 @@ public class Stat
 {
     [SerializeField] private float _baseValue;
 
-    [SerializeField] private float _multiplier;
+    [SerializeField] private float _multiplier = 1;
     [SerializeField] private float _bonusValue;
 
     public float GetValue()

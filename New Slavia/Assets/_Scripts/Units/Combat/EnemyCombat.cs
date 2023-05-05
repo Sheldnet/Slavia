@@ -16,7 +16,6 @@ public class EnemyCombat : MonoBehaviour
     {
         if (collision.transform.TryGetComponent<PlayerStats>(out PlayerStats playerStats))
         {
-            Debug.Log("aaaa");
             playerStats.TakeDamage(_enemyStats.Damage.GetValue() / playerStats.DamageReduction);
         }
     }

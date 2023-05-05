@@ -20,7 +20,6 @@ public class Shooting : MonoBehaviour
 
     private PlayerInput _playerInput;
     private PlayerStats _playerStats;
-    private PlayerStatsController _playerStatsController;
 
     public Stat BulletSize;
 
@@ -29,7 +28,6 @@ public class Shooting : MonoBehaviour
     {
         _playerStats = GetComponent<PlayerStats>();
         _playerInput = GetComponent<PlayerInput>();
-        _playerStatsController = GetComponent<PlayerStatsController>();
 
         _bulletPool = new ObjectPool<Bullet>(CreateBullet, GetBullet, BackBulletToPool, DestoyBullet, false, 10, 30);
 
@@ -78,8 +76,7 @@ public class Shooting : MonoBehaviour
         bullet.gameObject.SetActive(true);
         bullet.transform.position = _shotPoint.position;
         bullet.transform.rotation = Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward);
-        bullet.Initialize(_playerStats.Damage.GetValue(),
-                _playerStats.BulletSpeed.GetValue(), _playerStats.AttackRange.GetValue(), BulletSize.GetValue(), this._bulletPool);
+        //bullet.Initialize(_playerStats.Damage.GetValue(),     _playerStats.BulletSpeed.GetValue(), _playerStats.AttackRange.GetValue(), BulletSize.GetValue(), this._bulletPool);
     }
 
     private void BackBulletToPool(Bullet bullet)

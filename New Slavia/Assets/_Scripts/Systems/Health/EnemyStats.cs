@@ -7,8 +7,31 @@ public class EnemyStats : CharacterStats
     [SerializeField] private float _experience;
     [SerializeField] private float _gold;
 
+    [SerializeField] private float _InvincibilityDuration;
+    private bool _isInvincibility = false;
+
     [SerializeField] private GameObject expOrbPrefab;
     [SerializeField] private GameObject goldOrbPrefab;
+
+    private void Update()
+    {
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        if (!_isInvincibility)
+        {
+            base.TakeDamage(damage);
+            _isInvincibility = true;
+            StartCoroutine(BecomeVulnerable());
+        }
+    }
+
+    private IEnumerator BecomeVulnerable()
+    {
+        yield return new WaitForSeconds(_InvincibilityDuration);
+        _isInvincibility = false;
+    }
 
     protected override void Die()
     {

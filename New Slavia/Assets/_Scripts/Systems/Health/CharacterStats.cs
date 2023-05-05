@@ -16,9 +16,11 @@ public class CharacterStats : MonoBehaviour
         _currentHealth = MaxHealth;
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
+        Debug.Log(damage);
         _currentHealth -= damage;
+        Debug.Log(_currentHealth);
         if (_currentHealth <= 0)
         {
             Die();

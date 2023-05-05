@@ -39,7 +39,6 @@ public class HealthSystem : MonoBehaviour
     //}
     private void Start()
     {
-        Debug.Log(_playerStats.AttackSpeed.GetValue());
     }
 
     private void FixedUpdate()
