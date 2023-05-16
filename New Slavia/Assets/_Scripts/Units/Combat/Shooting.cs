@@ -23,6 +23,9 @@ public class Shooting : MonoBehaviour
     private PlayerStatsController _playerStatsController;
 
     public Stat BulletSize;
+    //
+    public bool autoShoot = false;
+    public bool autoshoting = false;
 
     // Start is called before the first frame update
     private void Start()
@@ -57,15 +60,31 @@ public class Shooting : MonoBehaviour
     private void Update()
     {
         AttackCD = 1 / (_playerStats.AttackSpeed.GetValue());
-        if (_currentAttackCooldown <= 0)
+        if (!autoShoot)
         {
-            _bulletPool.Get();
-            _currentAttackCooldown = 1 / AttackCD;
+            if (_currentAttackCooldown <= 0)
+            {
+                _bulletPool.Get();
+                _currentAttackCooldown = 1 / AttackCD;
+            }
+            else
+            {
+                _currentAttackCooldown -= Time.deltaTime;
+            }
         }
         else
         {
-            _currentAttackCooldown -= Time.deltaTime;
+            if (_currentAttackCooldown <= 0 && autoshoting)
+            {
+                _bulletPool.Get();
+                _currentAttackCooldown = 1 / AttackCD;
+            }
+            else
+            {
+                _currentAttackCooldown -= Time.deltaTime;
+            }
         }
+
     }
 
     private Bullet CreateBullet()
@@ -78,6 +97,7 @@ public class Shooting : MonoBehaviour
         bullet.gameObject.SetActive(true);
         bullet.transform.position = _shotPoint.position;
         bullet.transform.rotation = Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward);
+        Debug.Log("bul rot =  " + bullet.transform.rotation);
         bullet.Initialize(_playerStats.Damage.GetValue(),
                 _playerStats.BulletSpeed.GetValue(), _playerStats.AttackRange.GetValue(), BulletSize.GetValue(), this._bulletPool);
     }
