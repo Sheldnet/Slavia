@@ -7689,6 +7689,8 @@ GameObject:
   - component: {fileID: 1897393385043902753}
   - component: {fileID: 1897393385043902755}
   - component: {fileID: 1897393385043902756}
+  - component: {fileID: 1897393385043902757}
+  - component: {fileID: 1897393385043902758}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -8109,7 +8111,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2131967174}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b9f36de9811c19479774e3b84cbfdd6, type: 3}
   m_Name: 
@@ -8146,6 +8148,59 @@ MonoBehaviour:
     _baseValue: 5
     _multiplier: 1
     _bonusValue: 0
+--- !u!114 &1897393385043902757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131967174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b55aa9f3ec7ded4f86c745deceebea1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentBullet: {fileID: 0}
+  _bulletSmall: {fileID: 8042466622264029392, guid: c0ddd9281165d5f43895aa4c3d6c62d9, type: 3}
+  _bulletMedium: {fileID: -4232997384347383432, guid: d1a8642c0c6b870428e4c5ac5a28fddd, type: 3}
+  _bulletLarge: {fileID: 4380556701736294032, guid: 9e696912eead73744b79394aee377157, type: 3}
+  AttackCD: 20
+  _shotPoint: {fileID: 2032651096}
+  BulletSize:
+    _baseValue: 0
+    _multiplier: 1
+    _bonusValue: 0
+--- !u!114 &1897393385043902758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131967174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a375ec3c283c29748a494a1ab573b776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tempACD: 0
+  AttackCD: 0
+  FinalDamage: 0
+  FinalShootSpeed: 0
+  FinalRange: 0
+  MoveSpeed: 0
+  Damage: 0
+  DamageMul: 0
+  FloatDamage: 0
+  AttackSpeed: 0
+  AttackSpeedMul: 0
+  FloatAttackSpeed: 0
+  ShootSpeed: 0
+  ShootSpeedMul: 0
+  Range: 0
+  RangeMul: 0
+  Bullet: {fileID: 0}
+  shotPoint: {fileID: 0}
+  rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &1995352972675879719
 PrefabInstance:
   m_ObjectHideFlags: 0
