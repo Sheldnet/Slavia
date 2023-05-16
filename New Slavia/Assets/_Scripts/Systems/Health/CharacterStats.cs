@@ -11,6 +11,8 @@ public class CharacterStats : MonoBehaviour
     public Stat AttackSpeed;
     public Stat AttackRange;
 
+    protected bool _isInvincibility = false;
+
     protected virtual void Awake()
     {
         _currentHealth = MaxHealth;
@@ -18,18 +20,26 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        Debug.Log(damage);
-        _currentHealth -= damage;
-        Debug.Log(_currentHealth);
-        if (_currentHealth <= 0)
+        if (!_isInvincibility)
         {
-            Die();
+            _currentHealth -= damage;
+
+            if (_currentHealth <= 0)
+            {
+                Die();
+            }
         }
     }
 
     public float GetCurrentHealth()
     {
         return _currentHealth;
+    }
+
+    protected virtual IEnumerator BecomeVulnerable(float InvincibilityDuration)
+    {
+        yield return new WaitForSeconds(InvincibilityDuration);
+        _isInvincibility = false;
     }
 
     protected virtual void Die()

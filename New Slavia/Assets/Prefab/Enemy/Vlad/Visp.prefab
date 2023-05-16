@@ -138,6 +138,7 @@ MonoBehaviour:
     _bonusValue: 0
   _experience: 25
   _gold: 5
+  _InvincibilityDuration: 0
   expOrbPrefab: {fileID: 1434024916476280555, guid: 2c45095064a3cad719c461db5e7e249e, type: 3}
   goldOrbPrefab: {fileID: 7362090323905750723, guid: 71c536b2659cf4643a49460e50785a7c, type: 3}
 --- !u!114 &1496479520922005993
@@ -152,9 +153,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54d566c5a95d1bd40aa51508f9020ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  smoothTime: 0.4
+  _Speed: 2
+  _Force: 10
+  _ReppeledTime: 0.3
   minDistance: 0.5
+  _SmoothTime: 0.3
 --- !u!114 &1496479520922005986
 MonoBehaviour:
   m_ObjectHideFlags: 0
