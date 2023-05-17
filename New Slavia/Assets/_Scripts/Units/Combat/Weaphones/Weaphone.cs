@@ -35,6 +35,10 @@ public class Weaphone : MonoBehaviour
     public Stat PiercingCount;
     public Stat PushForce;
 
+    public bool autoShoot;
+    public bool autoshoting;
+    public float angleAuto;
+
     private void Start()
     {
         _bulletPool = new ObjectPool<Bullet>(CreateBullet, GetBullet, BackBulletToPool, DestoyBullet, false, 10, 30);
@@ -43,9 +47,41 @@ public class Weaphone : MonoBehaviour
 
     private void Update()
     {
-        if (_currentActiveTime > 0)
+        if (!autoShoot)
         {
-            if (_currentAttackCooldown <= 0)
+            if (_currentActiveTime > 0)
+            {
+                if (_currentAttackCooldown <= 0)
+                {
+                    for (int i = 0; i < _BulletsCountInShot; i++)
+                    {
+                        _bulletPool.Get();
+                    }
+
+                    _currentAttackCooldown = 1 / AttackInterval;
+                }
+                else
+                {
+                    _currentAttackCooldown -= Time.deltaTime;
+                }
+                _currentActiveTime -= Time.deltaTime;
+            }
+            else
+            {
+                if (_currentCooldown <= 0)
+                {
+                    _currentActiveTime = _ActiveTime;
+                    _currentCooldown = _ReloadTime;
+                }
+                else
+                {
+                    _currentCooldown -= Time.deltaTime;
+                }
+            }
+        }
+        else
+        {
+            if (_currentAttackCooldown <= 0 && autoshoting)
             {
                 for (int i = 0; i < _BulletsCountInShot; i++)
                 {
@@ -54,24 +90,13 @@ public class Weaphone : MonoBehaviour
 
                 _currentAttackCooldown = 1 / AttackInterval;
             }
-            else
+            else if (autoshoting)
             {
                 _currentAttackCooldown -= Time.deltaTime;
             }
-            _currentActiveTime -= Time.deltaTime;
+            
         }
-        else
-        {
-            if (_currentCooldown <= 0)
-            {
-                _currentActiveTime = _ActiveTime;
-                _currentCooldown = _ReloadTime;
-            }
-            else
-            {
-                _currentCooldown -= Time.deltaTime;
-            }
-        }
+
     }
 
     private Bullet CreateBullet()
@@ -83,6 +108,8 @@ public class Weaphone : MonoBehaviour
     {
         bullet.gameObject.SetActive(true);
         bullet.transform.position = _shotPoint.position;
+        _playerInput.LookDirection = angleAuto;
+        bullet.transform.rotation = Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward);
         if (Random.Range(0, 1) < _CritChancePercent / 100)
         {
             bullet.Initialize(Damage.GetValue() * BulletCritMultiplier, Speed.GetValue(), Range.GetValue(), BulletSize.GetValue(), PushForce.GetValue(), PiercingCount.GetValue(), this._bulletPool);
