@@ -7,8 +7,8 @@ public class StandartWeaphone : Weaphone
 {
     protected override void GetBullet(Bullet bullet)
     {
-        base.GetBullet(bullet);        
-        Debug.Log(_playerInput.LookDirection);
+        base.GetBullet(bullet);
+        bullet.transform.rotation = Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward);
         bullet.Move();
     }
 }
