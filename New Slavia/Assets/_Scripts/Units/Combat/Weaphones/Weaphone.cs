@@ -108,8 +108,7 @@ public class Weaphone : MonoBehaviour
     {
         bullet.gameObject.SetActive(true);
         bullet.transform.position = _shotPoint.position;
-        if(autoShoot)
-            _playerInput.LookDirection = angleAuto;
+        _playerInput.LookDirection = angleAuto;
         bullet.transform.rotation = Quaternion.AngleAxis(_playerInput.LookDirection, Vector3.forward);
         if (Random.Range(0, 1) < _CritChancePercent / 100)
         {
