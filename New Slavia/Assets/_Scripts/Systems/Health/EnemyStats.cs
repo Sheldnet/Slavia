@@ -10,7 +10,7 @@ public class EnemyStats : CharacterStats
     [SerializeField] private float _InvincibilityDuration;
 
     [SerializeField] private GameObject expOrbPrefab;
-    //[SerializeField] private GameObject goldOrbPrefab;
+    [SerializeField] private GameObject goldOrbPrefab;
 
     private void Update()
     {
@@ -30,14 +30,11 @@ public class EnemyStats : CharacterStats
     {
         base.Die();
         Debug.Log(transform.name + " умер");
-        Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
-        MoneySystem playerMoney = FindObjectOfType<MoneySystem>();
-        playerMoney.TakeGold();
-        //for (int i = 0; i < _experience; i += 5)
-        //{
-        //    Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
-        //    Instantiate(goldOrbPrefab, transform.position, Quaternion.identity);
-        //}
+        for (int i = 0; i < _experience; i += 5)
+        {
+            Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
+            Instantiate(goldOrbPrefab, transform.position, Quaternion.identity);
+        }
         Destroy(gameObject);
     }
 }
