@@ -10,12 +10,28 @@ public class Player : MonoBehaviour
 
     public bool isDead = false;
 
-    public float tempACD, AttackCD, FinalDamage, FinalShootSpeed, FinalRange;
-    private float MoveSpeed, Damage, DamageMul, FloatDamage, AttackSpeed, AttackSpeedMul, FloatAttackSpeed, ShootSpeed, ShootSpeedMul, Range, RangeMul;
+    public float tempACD, AttackCD, FinalDamage, FinalShootSpeed, FinalRange, FinalItemPickupRange, FinalMoveSpeed;
+    private float MoveSpeed, Damage, FloatDamage, AttackSpeed, FloatAttackSpeed, ShootSpeed, Range, DamageReduction, ItemPickupRangeRadius;
+    private float MoveSpeedMul, DamageMul, AttackSpeedMul, ShootSpeedMul, RangeMul, ItemPickupRangeMul;
+    [Header("Experience")]
+    public int level = 1;
+    public float experience;
+    public float expFactor;
+    public float maxExp;
+    public float expFromOrb;
+    [Header("HP")]
     public float health;
+    public float healthFactor;
     public float maxHealth;
+    [Header("Gold")]
+    public float goldFactor;
+    public float goldScore;
+    public float goldFromOrb;
+    public float FinalGold;
+    public float FinalExp;
     public enum ControlType { PC, Android }
     public ControlType controlType;
+
     //public Joystick joystick;
     public float speed;
     public GameObject Bullet, Bullet1, Bullet2, Bullet3;
@@ -24,16 +40,27 @@ public class Player : MonoBehaviour
     private Vector2 MoveInput;
     private Vector2 MoveVelocity;
     private Rigidbody2D rb;
+    public GameObject ItemPickupRange;
 
     public float xMinborder; //
     public float yMinborder;
     public float xMaxborder;
     public float yMaxborder;
 
+    [SerializeField] private UI_Inventory uiInventory;
+    [SerializeField] private UI_Stats uiStats;
+    public Inventory inventory;
+
     void Start() //Исходные статы
     {
+
+        FinalExp = expFromOrb;
+        FinalGold = goldFromOrb;
+        health = maxHealth;
+
         tempACD = 0;
         MoveSpeed = 5;
+        MoveSpeedMul = 1;
         rotation = Quaternion.Euler(0, 0, 0); //Направление пули
         rb = GetComponent<Rigidbody2D>();
         Damage = 1; //Урон
@@ -46,6 +73,9 @@ public class Player : MonoBehaviour
         ShootSpeedMul = 1; //Множитель скорости полета пули
         Range = 10; //Дальность атаки
         RangeMul = 1; //Множитель дальности атаки
+        DamageReduction = 0; // Снижение полученного урона
+        ItemPickupRangeRadius = 1;
+        ItemPickupRangeMul = 1;
         switch (PlayerPrefs.GetInt("GunType"))
         {
             case (1): //Обычный выстрел
@@ -73,24 +103,104 @@ public class Player : MonoBehaviour
                 AttackSpeedMul = 1;
                 break;
         }
+
+        Bullet.transform.localScale = new Vector3(6, 6, 1);
+
+        inventory = new Inventory();
+        uiInventory.SetInventory(inventory);
+
     }
 
     void Update()
     {
+
+        float BonusMoveSpeed = 0;
+        float BonusDamage = 0;
+        float BonusAttackSpeed = 0;
+
+        // Может сменить название на BulletSpeed?
+        float BonusShootSpeed = 0;
+        float BonusRange = 0;
+        float BonusMaxHealth = 0;
+        float BonusAttackSize = 0;
+        float BonusItemPickupRange = 0;
+
+
+        //Fire opal, sand clock, magic book, lucky coin
+        float BonusGold = 0;
+        float BonusExp = 0;
+        float BonusHealth = 0;
+
+
+
+        foreach (Item item in inventory.GetItemList()) {
+            switch (item.itemType)
+            {
+                default:
+                case Item.ItemType.Apple: BonusDamage = Damage * DamageMul / 10f * item.amount; break;
+                case Item.ItemType.BullHeart: BonusMaxHealth = maxHealth / 5f * item.amount; break;
+                case Item.ItemType.ShadowInABottle: BonusAttackSize = 6f / 10f * item.amount; break;
+                case Item.ItemType.BirchLeaves: BonusShootSpeed = ShootSpeed * ShootSpeedMul / 10f * item.amount; break;
+                case Item.ItemType.SnakeSkin: DamageReduction = 2 * item.amount; break;
+                case Item.ItemType.PigeonFeather: BonusMoveSpeed = MoveSpeed * MoveSpeedMul / 10f * item.amount; break;
+                case Item.ItemType.Magnet: BonusItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul / 10f * item.amount; break;
+                case Item.ItemType.LuckyCoin:
+                    if (goldFromOrb * (goldFactor * item.amount + 1) > BonusGold)
+                        BonusGold = goldFromOrb * ( goldFactor * item.amount + 1);
+                    FinalGold = BonusGold;
+                    break;
+                case Item.ItemType.MagicBook: 
+                    if(expFromOrb * (expFactor * item.amount + 1) != BonusExp)
+                        BonusExp = expFromOrb * (expFactor * item.amount + 1);
+                    FinalExp = BonusExp;
+                    break;
+                case Item.ItemType.FireOpal: BonusHealth = healthFactor * item.amount; break;
+                //case Item.ItemType.Magnet: BonusItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul / 10f * item.amount; break;
+
+            }
+        }
+        ///
+       
+        Debug.Log(BonusGold);
+        
+        health += BonusHealth;
+        ////
+        Bullet.transform.localScale = new Vector2(6 + BonusAttackSize, 6 + BonusAttackSize);
+        maxHealth += BonusMaxHealth;
+
         if (controlType == ControlType.PC) MoveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")); //Передвижение ПК
         //else if (controlType == ControlType.Android) MoveInput = new Vector2(joystick.Horizontal, joystick.Vertical); //Передвижение Андроид
-        MoveVelocity = MoveInput.normalized * MoveSpeed;
+        FinalMoveSpeed = MoveSpeed * MoveSpeedMul + BonusMoveSpeed;
+        MoveVelocity = MoveInput.normalized * (FinalMoveSpeed * MoveSpeedMul + BonusMoveSpeed);
         AttackCD = 1 / (AttackSpeed * AttackSpeedMul + FloatAttackSpeed); //Конечная скорость атаки
-        FinalDamage = Damage * DamageMul + FloatDamage; //Конечный урон
-        FinalShootSpeed = ShootSpeed * ShootSpeedMul; //Конечная скорость полета пули
+        FinalDamage = Damage * DamageMul + FloatDamage + BonusDamage; //Конечный урон
+        FinalShootSpeed = ShootSpeed * ShootSpeedMul + BonusShootSpeed; //Конечная скорость полета пули
         FinalRange = Range * RangeMul; //Конечная дальность атаки
+
+        FinalItemPickupRange = ItemPickupRangeRadius * ItemPickupRangeMul + BonusItemPickupRange;
+
+        ItemPickupRange.GetComponent<CircleCollider2D>().radius = FinalItemPickupRange;
+
+        uiStats.SetStats(FinalMoveSpeed, FinalDamage, AttackCD, FinalShootSpeed, FinalRange, Bullet.transform.localScale.x, maxHealth, DamageReduction, FinalItemPickupRange);
+
         if (tempACD <= 0)
         {
             Shoot();
             tempACD = AttackCD;
         }
         else tempACD -= Time.deltaTime;
+
+
+        if (experience > maxExp)
+        {
+            experience -= maxExp;
+            level++;
+            maxExp *= level;
+            //maxHealth*=level;
+        }
+
     }
+
 
     //private void Move()
 
@@ -123,5 +233,52 @@ public class Player : MonoBehaviour
         yMinborder = gameCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y + padding;
         yMaxborder = gameCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y - padding;
     }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        switch (collider.tag)
+        {
+            case "PassiveItem":
+                ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+                if (itemWorld != null)
+                {
+                    inventory.AddItem(itemWorld.GetItem());
+                    itemWorld.DestroySelf();
+                }
+                break;
+            case "ExpOrb":
+                if (collider != null)
+                {
+                    experience += FinalExp;
+                    Destroy(collider.gameObject);
+                }
+                break;
+            case "GoldOrb":
+                if (collider != null)
+                {
+                    goldScore += FinalExp;
+                    Destroy(collider.gameObject);
+                }
+                break;
+
+        }
+
+        //if (collider.CompareTag("PassiveItem")) {
+        //    ItemWorld itemWorld = collider.GetComponent<ItemWorld>();
+        //    if (itemWorld != null) {
+        //        inventory.AddItem(itemWorld.GetItem());
+        //        itemWorld.DestroySelf();
+        //    }
+        //}
+        //else if (collider.CompareTag("ExpOrb")) {
+        //    if (collider != null) {
+        //        experience += expFromOrb;
+        //        Destroy(collider.gameObject);
+        //    }
+        //}
+        
+    }
+
+
         
 }

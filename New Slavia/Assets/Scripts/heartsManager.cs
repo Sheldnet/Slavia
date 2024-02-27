@@ -1,33 +1,64 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class heartsManager : MonoBehaviour
 {
     public Player pl;
-    public Image[] hearts;
-    public Sprite fullHeart;
-    public Sprite halfHeart;
-    public Sprite emptyHeart;
+    public Image healtBar;
+    public float fillHeal;
+    public float velocityDmg;
+    public float velocityHeal;
+
+    public Image expBar;
+    public TMP_Text levelText;
+    public float fillExp;
+    public float velocityExp;
+
+    public TMP_Text goldText;
+    public float velocityGold;
+
+    void Start()
+    {        
+        fillHeal = 1f;
+        velocityDmg = 0.1f;
+        velocityHeal = 0.1f;
+
+        fillExp = 0f;
+        velocityExp = 0.1f;
+
+    }
 
     void FixedUpdate()
     {
-        foreach(Image img in hearts)
-        {
-            img.sprite = emptyHeart;
-        }
+        healMan();
+        expMan();
+        goldMan();
 
-        for (int i = 0; i < pl.health; i++)
-        {
-            if(i % 2 == 0)
-            {
-                hearts[i].sprite = fullHeart;
-            }
-            else
-            {
-                hearts[i].sprite = halfHeart;
-            }
-        }
     }
+
+    public void healMan()
+    {
+        fillHeal = pl.health / pl.maxHealth;
+        if (healtBar.fillAmount > fillHeal)
+            healtBar.fillAmount -= velocityDmg * Time.deltaTime;
+        else if (healtBar.fillAmount <= fillHeal)
+            healtBar.fillAmount += velocityDmg * Time.deltaTime;
+    }
+    public void expMan()
+    {
+        levelText.text = pl.level.ToString();
+        fillExp = pl.experience / pl.maxExp;
+        if (expBar.fillAmount <= fillExp && fillExp != 0)
+            expBar.fillAmount += fillExp * Time.deltaTime;
+        else if (expBar.fillAmount == 1)
+            expBar.fillAmount = 0;
+    }
+    public void goldMan()
+    {
+        goldText.text = pl.goldScore.ToString();
+    }
+
 }

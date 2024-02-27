@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d845f69257ed641d7bdaaba1e1b66e73
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - pfItemWorld: {instanceID: 0}
+  - AppleSprite: {instanceID: 0}
+  - BullHeartSprite: {instanceID: 0}
+  - ShadowInABottleSprite: {instanceID: 0}
+  - BirchLeavesSprite: {instanceID: 0}
+  executionOrder: -80
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
